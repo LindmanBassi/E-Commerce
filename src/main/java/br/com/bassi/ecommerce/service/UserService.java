@@ -8,6 +8,9 @@ import br.com.bassi.ecommerce.repositories.BillingAddressRepository;
 import br.com.bassi.ecommerce.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class UserService {
 
@@ -32,5 +35,23 @@ public class UserService {
        user.setBillingAddress(savedBillingAddress);
 
         return userRepository.save(user);
+    }
+
+    public Optional<User> findById(UUID userId) {
+        return userRepository.findById(userId);
+
+    }
+
+    public boolean deletedById(UUID userId) {
+
+        var user = userRepository.findById(userId);
+
+        if(user.isPresent()){
+            userRepository.deleteById(userId);
+            billingAddressRepository.deleteById(user.get().getBillingAddress().getBillingAddressId());
+        }
+
+
+        return user.isPresent();
     }
 }
