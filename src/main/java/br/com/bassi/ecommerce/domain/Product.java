@@ -3,6 +3,7 @@ package br.com.bassi.ecommerce.domain;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_products")
@@ -18,6 +19,15 @@ public class Product {
 
     @Column(name = "price")
     private BigDecimal price;
+
+    @ManyToMany
+    @JoinTable(
+            name = "tb_products_tag",
+            uniqueConstraints = @UniqueConstraint(columnNames = {"product_id","tag_id"}),
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags;
 
     public Product() {
     }
@@ -44,5 +54,13 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }
