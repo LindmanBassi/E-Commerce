@@ -3,11 +3,14 @@ package br.com.bassi.ecommerce.service;
 import br.com.bassi.ecommerce.domain.*;
 import br.com.bassi.ecommerce.dto.OrderDto;
 import br.com.bassi.ecommerce.dto.OrderItemDto;
+import br.com.bassi.ecommerce.dto.OrderSummaryDto;
 import br.com.bassi.ecommerce.exception.OrderException;
 import br.com.bassi.ecommerce.repositories.OrderItemRepository;
 import br.com.bassi.ecommerce.repositories.OrderRepository;
 import br.com.bassi.ecommerce.repositories.ProductRepository;
 import br.com.bassi.ecommerce.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,7 +32,7 @@ public class OrderService {
     }
 
 
-    public Order createOrder(OrderDto dto){
+    public Order createOrder(OrderDto dto) {
 
         var order = new Order();
         //1-validate user
@@ -53,17 +56,16 @@ public class OrderService {
     }
 
 
-
-    private User validateUser(OrderDto dto){
+    private User validateUser(OrderDto dto) {
 
         return userRepository.findById(dto.userId())
-                .orElseThrow(()-> new OrderException("user not found"));
+                .orElseThrow(() -> new OrderException("user not found"));
     }
 
     private List<OrderItem> validadeOrderItems(Order order,
-                                               OrderDto dto){
+                                               OrderDto dto) {
 
-        if(dto.itens().isEmpty()){
+        if (dto.itens().isEmpty()) {
             throw new OrderException("order itens is empty");
         }
 
@@ -88,9 +90,9 @@ public class OrderService {
         return orderItem;
     }
 
-    private Product getProduct(Long productId){
+    private Product getProduct(Long productId) {
         return productRepository.findById(productId)
-                .orElseThrow(()-> new OrderException("product not found"));
+                .orElseThrow(() -> new OrderException("product not found"));
     }
 
     private BigDecimal calculateOrderTotal(List<OrderItem> items) {
@@ -100,4 +102,17 @@ public class OrderService {
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
     }
+
+    public Page<OrderSummaryDto> findAll(Integer page, Integer pageSize) {
+        return orderRepository.findAll(PageRequest.of(page,pageSize))
+                .map(entity ->{
+                    return new OrderSummaryDto(
+                            entity.getId(),
+                            entity.getOrderDate(),
+                            entity.getUser().getId(),
+                            entity.getTotal()
+                    );
+                });
+    }
+
 }
