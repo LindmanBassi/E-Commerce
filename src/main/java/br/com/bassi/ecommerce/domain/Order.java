@@ -24,8 +24,9 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "orderItemId.order",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.order", cascade = CascadeType.ALL)
     private List<OrderItem> item;
+
 
     public Order() {
     }

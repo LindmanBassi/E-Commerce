@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 public class OrderItem {
 
     @EmbeddedId
-    private OrderItemId orderItemId;
+    private OrderItemId id;
 
     @Column(name = "sale_price")
     private BigDecimal salePrice;
@@ -40,10 +40,10 @@ public class OrderItem {
     }
 
     public OrderItemId getOrderItemId() {
-        return orderItemId;
+        return id;
     }
 
     public void setOrderItemId(OrderItemId orderItemId) {
-        this.orderItemId = orderItemId;
+        this.id = orderItemId;
     }
 }
