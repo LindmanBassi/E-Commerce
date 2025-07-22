@@ -1,7 +1,6 @@
 package br.com.bassi.ecommerce.domain;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "tb_orders")
 public class Order {
+
     @Id
     @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

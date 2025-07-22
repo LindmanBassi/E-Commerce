@@ -1,13 +1,11 @@
 package br.com.bassi.ecommerce.service;
 
-
 import br.com.bassi.ecommerce.domain.BillingAddress;
 import br.com.bassi.ecommerce.domain.User;
 import br.com.bassi.ecommerce.dto.UserDto;
 import br.com.bassi.ecommerce.repositories.BillingAddressRepository;
 import br.com.bassi.ecommerce.repositories.UserRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,15 +27,16 @@ public class UserService {
         billingAddress.setNumber(dto.number());
         billingAddress.setComplement(dto.complement());
 
-//       var savedBillingAddress = billingAddressRepository.save(billingAddress);
-       var user = new User();
-       user.setFullName(dto.fullName());
-       user.setBillingAddress(billingAddress);
+
+           var user = new User();
+           user.setFullName(dto.fullName());
+           user.setBillingAddress(billingAddress);
 
         return userRepository.save(user);
     }
 
     public Optional<User> findById(UUID userId) {
+
         return userRepository.findById(userId);
 
     }
@@ -47,11 +46,9 @@ public class UserService {
         var user = userRepository.findById(userId);
 
         if(user.isPresent()){
-//            billingAddressRepository.deleteById(user.get().getBillingAddress().getBillingAddressId());
             userRepository.deleteById(userId);
 
         }
-
 
         return user.isPresent();
     }

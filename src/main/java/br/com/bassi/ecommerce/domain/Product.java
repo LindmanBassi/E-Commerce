@@ -1,7 +1,6 @@
 package br.com.bassi.ecommerce.domain;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.util.List;
 

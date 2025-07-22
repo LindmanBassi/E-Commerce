@@ -3,10 +3,8 @@ package br.com.bassi.ecommerce.controller;
 import br.com.bassi.ecommerce.domain.User;
 import br.com.bassi.ecommerce.dto.UserDto;
 import br.com.bassi.ecommerce.service.UserService;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.util.UUID;
 
@@ -30,6 +28,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<User> findById(@PathVariable("userId")UUID userId){
+
         var user = userService.findById(userId);
 
         return user.isPresent()?
@@ -39,12 +38,12 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deletedById(@PathVariable("userId")UUID userId){
+
         var deleted = userService.deletedById(userId);
 
         return deleted ?
                 ResponseEntity.noContent().build():
                 ResponseEntity.notFound().build();
     }
-
 
 }

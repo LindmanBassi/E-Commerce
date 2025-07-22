@@ -1,14 +1,9 @@
 package br.com.bassi.ecommerce.controller;
 
-import br.com.bassi.ecommerce.dto.ApiResponse;
-import br.com.bassi.ecommerce.dto.OrderDto;
-import br.com.bassi.ecommerce.dto.OrderSummaryDto;
-import br.com.bassi.ecommerce.dto.PaginationResponseDto;
+import br.com.bassi.ecommerce.dto.*;
 import br.com.bassi.ecommerce.service.OrderService;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 
 @RestController
@@ -27,7 +22,6 @@ public class OrderController {
        var order = orderService.createOrder(dto);
 
        return ResponseEntity.created(URI.create("/orders/" + order.getId())).build();
-
     }
 
     @GetMapping
@@ -41,6 +35,15 @@ public class OrderController {
                         resp.getContent(),
                                 new PaginationResponseDto(resp.getNumber(),resp.getSize(),resp.getTotalElements(),resp.getTotalPages())
                 ));
+    }
 
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponseDto> findById(@PathVariable("orderId") Long orderId){
+
+        var order = orderService.findById(orderId);
+
+        return order.isPresent() ?
+                ResponseEntity.ok(OrderResponseDto.fromEntity(order.get())):
+                ResponseEntity.notFound().build();
     }
 }

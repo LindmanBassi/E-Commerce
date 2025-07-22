@@ -12,10 +12,10 @@ import br.com.bassi.ecommerce.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -52,7 +52,6 @@ public class OrderService {
 
         //5-repository save
         return orderRepository.save(order);
-
     }
 
 
@@ -91,6 +90,7 @@ public class OrderService {
     }
 
     private Product getProduct(Long productId) {
+
         return productRepository.findById(productId)
                 .orElseThrow(() -> new OrderException("product not found"));
     }
@@ -104,6 +104,7 @@ public class OrderService {
     }
 
     public Page<OrderSummaryDto> findAll(Integer page, Integer pageSize) {
+
         return orderRepository.findAll(PageRequest.of(page,pageSize))
                 .map(entity ->{
                     return new OrderSummaryDto(
@@ -115,4 +116,8 @@ public class OrderService {
                 });
     }
 
+    public Optional<Order> findById(Long orderId) {
+
+        return orderRepository.findById(orderId);
+    }
 }
